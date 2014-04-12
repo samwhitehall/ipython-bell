@@ -36,7 +36,7 @@ class OSXNotificationCentre:
         notification = NSUserNotification.alloc().init()
         notification.setTitle_('iPython Task Complete')
         notification.setSubtitle_(expr.split('\n')[0])
-        notification.setInformativeText_('stdout: %s' % out) 
+        notification.setInformativeText_(out) 
         notification.setUserInfo_({})
         if self.sound:
             notification.setSoundName_('NSUserNotificationDefaultSoundName')

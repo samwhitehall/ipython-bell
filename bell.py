@@ -12,7 +12,8 @@ from IPython.core.magics.execution import ExecutionMagics
 notifiers = {
     'term' : notifiers.TerminalBell(),
     'osx' : notifiers.NSBeep(),
-    'nc' : notifiers.OSXNotificationCentre()
+    'nc' : notifiers.OSXNotificationCentre(),
+    'ncsilent' : notifiers.OSXNotificationCentreSilent()
 }
 
 @magics_class
@@ -27,8 +28,12 @@ class BellMagic(ExecutionMagics):
         # parse into notification type option (-n) and statement to execute
         opts, stmt = self.parse_options(line, 'n:', strict=False)
         notify_type = getattr(opts, 'n', 'term')
-        # TODO: what about if a user types an incorrect name in?
-        print stmt
+
+        try:
+            notifier = notifiers[notify_type]
+        except KeyError:
+            raise Exception("Could not find a notifier with the name '%s'" 
+                % notify_type)
 
         if stmt=="" and cell is None:
             raise UsageError("Can't use statement directly after '%%bell'!")
@@ -62,17 +67,13 @@ class BellMagic(ExecutionMagics):
 
         # .. or nothing if it's a statement
         else:
-            exec code
             out = None
-
-        # perform actual notification
-        try:
-            notifier = notifiers[notify_type]
-            notifier.ping(expr, out)
-        except KeyError:
-            raise Exception("Could not find a notifier with the name '%s'" 
-                % notify_type)
-        
+            try:
+                exec code 
+                notifier.ping(expr, out)
+            except Exception as e:
+                notifier.ping(expr, 'Exception:' + str(e))
+                
         return out
 
 # hook into iPython
