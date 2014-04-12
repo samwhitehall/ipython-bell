@@ -17,21 +17,26 @@ class BellMagic(ExecutionMagics):
         '''A magic for iPython which notifies the user when the line/cell has
         finished execution.'''
 
+        # parse into notification type option (-n) and statement to execute
         opts, stmt = self.parse_options(line, 'n:', strict=False)
         notification_type = getattr(opts, 'n', 'bell')
-        
+
         if stmt=="" and cell is None:
             raise UsageError("Can't use statement directly after '%%bell'!")
 
-        # why?
-        if cell:
+        if cell: # i.e. cell magic
             expr = self.shell.input_transformer_manager.transform_cell(cell)
-        else:
+        else: # i.e. line magic
+            # NB at the moment, this still includes the options crud
+            # TODO: see how %time gets past this
             expr = self.shell.input_transformer_manager.transform_cell(line)
 
+        # convert expression to AST & perform transformations
         expr_ast = ast.parse(expr)
-        expr_ast = self.shell.transform_ast(expr_ast) # why?
+        expr_ast = self.shell.transform_ast(expr_ast) #
 
+        # if it's an expression (i.e. to be evaluated instead of executed, like
+        # a statement), then further transforms are needed
         if len(expr_ast.body)==1 and isinstance(expr_ast.body[0], ast.Expr):
             mode = 'eval'
             source = '<bell eval>'
@@ -42,17 +47,21 @@ class BellMagic(ExecutionMagics):
 
         code = compile(expr_ast, source, mode)
         
+        # evaluate expression & return to user...
         if mode=='eval':
             out =  eval(code)
+
+        # .. or nothing if it's a statement
         else:
-            # nothing output: is this desirable behaviour?
             exec code
             out = None
 
-        if notification_type == "bell":
+        # perform actual notification
+        # TODO: tidy this out!
+        if notification_type == "bell": # terminal bell
             print "\a"
 
-        elif notification_type == "osxbeep":
+        elif notification_type == "osxbeep": # os x notify sound
             try:
                 from AppKit import NSBeep
                 NSBeep()
@@ -60,10 +69,10 @@ class BellMagic(ExecutionMagics):
                 raise ImportError("Could not import AppKit.NSBeep -- maybe you're"
                     "not on OS X, or are on an old version without PyObjC")
 
-        elif notification_type == "nc":
+        elif notification_type == "nc": # os x notification centre
             osx_notify(expr, out, sound=True)
             
-        elif notification_type == "ncsilent":
+        elif notification_type == "ncsilent": # os x notification centre, silent
             osx_notify(expr, out, sound=False)
 
         return out
@@ -88,5 +97,6 @@ def osx_notify(expr, out, sound=True):
 
     return None
 
+# hook into iPython
 ip = get_ipython()
 ip.register_magics(BellMagic)
