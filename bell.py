@@ -3,10 +3,17 @@ __license__ = 'MIT'
 __version__ = '0.9'
 
 import ast
+import notifiers
 
 from IPython.core.error import UsageError
 from IPython.core.magic import magics_class, line_cell_magic
 from IPython.core.magics.execution import ExecutionMagics
+
+notifiers = {
+    'term' : notifiers.TerminalBell(),
+    'osx' : notifiers.NSBeep(),
+    'nc' : notifiers.OSXNotificationCentre()
+}
 
 @magics_class
 class BellMagic(ExecutionMagics):
@@ -19,7 +26,8 @@ class BellMagic(ExecutionMagics):
 
         # parse into notification type option (-n) and statement to execute
         opts, stmt = self.parse_options(line, 'n:', strict=False)
-        notification_type = getattr(opts, 'n', 'bell')
+        notify_type = getattr(opts, 'n', 'term')
+        # TODO: what about if a user types an incorrect name in?
 
         if stmt=="" and cell is None:
             raise UsageError("Can't use statement directly after '%%bell'!")
@@ -57,45 +65,10 @@ class BellMagic(ExecutionMagics):
             out = None
 
         # perform actual notification
-        # TODO: tidy this out!
-        if notification_type == "bell": # terminal bell
-            print "\a"
-
-        elif notification_type == "osxbeep": # os x notify sound
-            try:
-                from AppKit import NSBeep
-                NSBeep()
-            except ImportError:
-                raise ImportError("Could not import AppKit.NSBeep -- maybe you're"
-                    "not on OS X, or are on an old version without PyObjC")
-
-        elif notification_type == "nc": # os x notification centre
-            osx_notify(expr, out, sound=True)
-            
-        elif notification_type == "ncsilent": # os x notification centre, silent
-            osx_notify(expr, out, sound=False)
-
+        notifier = notifiers[notify_type]
+        notifier.ping(expr, out)
+        
         return out
-
-
-def osx_notify(expr, out, sound=True):
-    import sys
-    import Foundation, AppKit, objc
-
-    NSUserNotification = objc.lookUpClass('NSUserNotification')
-    NSUserNotificationCenter = objc.lookUpClass('NSUserNotificationCenter')
-
-    notification = NSUserNotification.alloc().init()
-    notification.setTitle_('iPython Task Complete')
-    notification.setSubtitle_(expr.split('\n')[0])
-    notification.setInformativeText_('stdout: %s' % out) # or stderr in red?
-    notification.setUserInfo_({})
-    if sound:
-        notification.setSoundName_('NSUserNotificationDefaultSoundName')
-
-    NSUserNotificationCenter.defaultUserNotificationCenter().scheduleNotification_(notification)
-
-    return None
 
 # hook into iPython
 ip = get_ipython()
