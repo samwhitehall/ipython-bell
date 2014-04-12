@@ -22,7 +22,8 @@ class NSBeep:
 
 class OSXNotificationCentre:
     '''Send a full notification to OS X Notification Centre (OS X 10.8+)'''
-    def ping(self, expr, out, sound=True):
+    sound = True
+    def ping(self, expr, out):
         try:
             import Foundation, AppKit, objc
         except ImportError:
@@ -35,12 +36,16 @@ class OSXNotificationCentre:
         notification = NSUserNotification.alloc().init()
         notification.setTitle_('iPython Task Complete')
         notification.setSubtitle_(expr.split('\n')[0])
-        notification.setInformativeText_('stdout: %s' % out) # or stderr in red?
+        notification.setInformativeText_('stdout: %s' % out) 
         notification.setUserInfo_({})
-        if sound:
+        if self.sound:
             notification.setSoundName_('NSUserNotificationDefaultSoundName')
 
-        NSUserNotificationCenter.defaultUserNotificationCenter().scheduleNotification_(notification)
+        NSUserNotificationCenter\
+            .defaultUserNotificationCenter()\
+            .scheduleNotification_(notification)
 
         return None
 
+class OSXNotificationCentreSilent(OSXNotificationCentre):
+    sound = False
