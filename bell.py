@@ -1,3 +1,7 @@
+__author__ = 'Sam Whitehall'
+__license__ = 'MIT'
+__version__ = '0.9'
+
 import ast
 
 from IPython.core.error import UsageError
@@ -7,11 +11,13 @@ from IPython.core.magics.execution import ExecutionMagics
 @magics_class
 class BellMagic(ExecutionMagics):
 
+    # define line and cell magic (%bell and %%bell)
     @line_cell_magic
     def bell(self, line='', cell=None):
+        '''A magic for iPython which notifies the user when the line/cell has
+        finished execution.'''
 
         opts, stmt = self.parse_options(line, 'n:', strict=False)
-
         notification_type = getattr(opts, 'n', 'bell')
         
         if stmt=="" and cell is None:
