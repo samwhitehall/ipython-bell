@@ -23,7 +23,11 @@ class NSBeep:
 class OSXNotificationCentre:
     '''Send a full notification to OS X Notification Centre (OS X 10.8+)'''
     def ping(self, expr, out, sound=True):
-        import Foundation, AppKit, objc # TODO: graceful error handling
+        try:
+            import Foundation, AppKit, objc
+        except ImportError:
+            raise Exception("Could not import Foundation/AppKit/objc -- maybe"
+                "you're not on OS X, or are on an old version without PyObjC")
 
         NSUserNotification = objc.lookUpClass('NSUserNotification')
         NSUserNotificationCenter = objc.lookUpClass('NSUserNotificationCenter')
