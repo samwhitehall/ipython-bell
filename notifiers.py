@@ -13,11 +13,12 @@ class TerminalBell:
 class NSBeep:
     '''System beep (OS X only).'''
     def ping(self, expr, out):
+        raise Exception("Hello world")
+
         try:
             from AppKit import NSBeep
             NSBeep()
         except ImportError:
-            # TODO: what does this error handling look like?
             raise Exception("Could not import AppKit.NSBeep -- maybe you're"
                 "not on OS X, or are on an old version without PyObjC")
 
