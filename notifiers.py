@@ -27,7 +27,7 @@ class OSXNotificationCentre:
             import Foundation, AppKit, objc
         except ImportError:
             raise Exception("Could not import Foundation/AppKit/objc -- maybe"
-                "you're not on OS X, or are on an old version without PyObjC")
+                "you're not on OS X 10.8+")
 
         NSUserNotification = objc.lookUpClass('NSUserNotification')
         NSUserNotificationCenter = objc.lookUpClass('NSUserNotificationCenter')
