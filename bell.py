@@ -22,61 +22,27 @@ notifiers = {
 class BellMagic(ExecutionMagics):
 
     # define line and cell magic (%bell and %%bell)
-    @line_cell_magic
     @magic_arguments()
     @argument('-n', '--notifier', 
         choices=notifiers.keys(), 
         help='Choice of notifiers')
-    def bell(self, line):
+    @argument('statement', nargs='*', help='')
+    @line_cell_magic
+    def bell(self, line, cell=None):
         '''A magic for iPython which notifies the user when the line/cell has
         finished execution.'''
 
-        # parse into notification type option (-n) and statement to execute
-        ##opts, stmt = self.parse_options(line, 'n:', strict=False)
-        ##notify_type = getattr(opts, 'n', 'term')
         args = parse_argstring(self.bell, line)
-        print args
 
-        notifier = notifiers[args.notify_type]
+        notifier = notifiers[args.notifier]
 
-        if stmt=="" and cell is None:
-            raise UsageError("Can't use statement directly after '%%bell'!")
-
-        if cell: # i.e. cell magic
-            expr = self.shell.input_transformer_manager.transform_cell(cell)
-        else: # i.e. line magic
-            # NB at the moment, this still includes the options crud
-            # TODO: see how %time gets past this
-            expr = self.shell.input_transformer_manager.transform_cell(line)
-
-        # convert expression to AST & perform transformations
-        expr_ast = ast.parse(expr)
-        expr_ast = self.shell.transform_ast(expr_ast) #
-
-        # if it's an expression (i.e. to be evaluated instead of executed, like
-        # a statement), then further transforms are needed
-        if len(expr_ast.body)==1 and isinstance(expr_ast.body[0], ast.Expr):
-            mode = 'eval'
-            source = '<bell eval>'
-            expr_ast = ast.Expression(expr_ast.body[0].value)
+        if cell:
+            code = cell
         else:
-            mode = 'exec'
-            source = '<bell exec>'
+            code = ' '.join(args.statement)
 
-        code = compile(expr_ast, source, mode)
-        
-        # evaluate expression & return to user...
-        if mode=='eval':
-            out =  eval(code)
-
-        # .. or nothing if it's a statement
-        else:
-            out = None
-            try:
-                exec code 
-                notifier.ping(expr, out)
-            except Exception as e:
-                notifier.ping(expr, out, exception=e)
+        out = self.shell.run_cell(code)
+        notifier.ping(code, out)
                 
         return out
 
