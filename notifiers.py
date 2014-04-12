@@ -1,7 +1,8 @@
+import sys
+
 class TerminalBell:
     def ping(self, expr, out):
-        #TODO: use system out to avoid extra newline
-        print '\a'
+        sys.stdout.write('\a')
 
 class NSBeep:
     def ping(self, expr, out):
@@ -15,7 +16,6 @@ class NSBeep:
 
 class OSXNotificationCentre:
     def ping(self, expr, out, sound=True):
-        import sys
         import Foundation, AppKit, objc # TODO: graceful error handling
 
         NSUserNotification = objc.lookUpClass('NSUserNotification')
