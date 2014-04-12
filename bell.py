@@ -72,7 +72,7 @@ class BellMagic(ExecutionMagics):
                 exec code 
                 notifier.ping(expr, out)
             except Exception as e:
-                notifier.ping(expr, 'Exception:' + str(e))
+                notifier.ping(expr, out, exception=e)
                 
         return out
 

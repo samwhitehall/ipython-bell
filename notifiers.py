@@ -7,12 +7,12 @@ class TerminalBell:
     '''Default choice to print an audible bell character to stdout. Works in
     terminal IPython and IPython QT, but not in IPython Notebook.'''
 
-    def ping(self, expr, out):
+    def ping(self, expr, out, exception=None):
         sys.stdout.write('\a')
 
 class NSBeep:
     '''System beep (OS X only).'''
-    def ping(self, expr, out):
+    def ping(self, expr, out, exception=None):
         try:
             from AppKit import NSBeep
             NSBeep()
@@ -23,7 +23,7 @@ class NSBeep:
 class OSXNotificationCentre:
     '''Send a full notification to OS X Notification Centre (OS X 10.8+)'''
     sound = True
-    def ping(self, expr, out):
+    def ping(self, expr, out, exception=None):
         try:
             import Foundation, AppKit, objc
         except ImportError:
@@ -34,9 +34,14 @@ class OSXNotificationCentre:
         NSUserNotificationCenter = objc.lookUpClass('NSUserNotificationCenter')
 
         notification = NSUserNotification.alloc().init()
-        notification.setTitle_('iPython Task Complete')
+        if exception:
+            notification.setTitle_('%s in iPython Task' 
+                % str(exception.__class__.__name__))
+            notification.setInformativeText_(str(exception)) 
+        else:
+            notification.setTitle_('iPython Task Complete')
+            notification.setInformativeText_(out) 
         notification.setSubtitle_(expr.split('\n')[0])
-        notification.setInformativeText_(out) 
         notification.setUserInfo_({})
         if self.sound:
             notification.setSoundName_('NSUserNotificationDefaultSoundName')
