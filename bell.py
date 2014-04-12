@@ -8,6 +8,8 @@ import notifiers
 from IPython.core.error import UsageError
 from IPython.core.magic import magics_class, line_cell_magic
 from IPython.core.magics.execution import ExecutionMagics
+from IPython.core.magic_arguments import (argument, magic_arguments,
+    parse_argstring)
 
 notifiers = {
     'term' : notifiers.TerminalBell(),
@@ -21,19 +23,21 @@ class BellMagic(ExecutionMagics):
 
     # define line and cell magic (%bell and %%bell)
     @line_cell_magic
-    def bell(self, line='', cell=None):
+    @magic_arguments()
+    @argument('-n', '--notifier', 
+        choices=notifiers.keys(), 
+        help='Choice of notifiers')
+    def bell(self, line):
         '''A magic for iPython which notifies the user when the line/cell has
         finished execution.'''
 
         # parse into notification type option (-n) and statement to execute
-        opts, stmt = self.parse_options(line, 'n:', strict=False)
-        notify_type = getattr(opts, 'n', 'term')
+        ##opts, stmt = self.parse_options(line, 'n:', strict=False)
+        ##notify_type = getattr(opts, 'n', 'term')
+        args = parse_argstring(self.bell, line)
+        print args
 
-        try:
-            notifier = notifiers[notify_type]
-        except KeyError:
-            raise Exception("Could not find a notifier with the name '%s'" 
-                % notify_type)
+        notifier = notifiers[args.notify_type]
 
         if stmt=="" and cell is None:
             raise UsageError("Can't use statement directly after '%%bell'!")
