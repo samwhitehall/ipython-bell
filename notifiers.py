@@ -13,8 +13,6 @@ class TerminalBell:
 class NSBeep:
     '''System beep (OS X only).'''
     def ping(self, expr, out):
-        raise Exception("Hello world")
-
         try:
             from AppKit import NSBeep
             NSBeep()
