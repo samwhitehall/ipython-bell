@@ -28,6 +28,7 @@ class BellMagic(ExecutionMagics):
         opts, stmt = self.parse_options(line, 'n:', strict=False)
         notify_type = getattr(opts, 'n', 'term')
         # TODO: what about if a user types an incorrect name in?
+        print stmt
 
         if stmt=="" and cell is None:
             raise UsageError("Can't use statement directly after '%%bell'!")
@@ -65,8 +66,12 @@ class BellMagic(ExecutionMagics):
             out = None
 
         # perform actual notification
-        notifier = notifiers[notify_type]
-        notifier.ping(expr, out)
+        try:
+            notifier = notifiers[notify_type]
+            notifier.ping(expr, out)
+        except KeyError:
+            raise Exception("Could not find a notifier with the name '%s'" 
+                % notify_type)
         
         return out
 
