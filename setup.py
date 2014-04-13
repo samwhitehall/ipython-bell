@@ -9,7 +9,7 @@ setup(
     author_email='me@samwhitehall.com',
     description='Python line & cell magic to notify the programmer when a '
         'line/cell has completed execution',
-    install_requires=[
-        'IPython >= 1.00',
-    ]
+    requires=[
+        'IPython (>=1.00)',
+    ],
 )
