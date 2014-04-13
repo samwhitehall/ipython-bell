@@ -3,7 +3,7 @@ from distutils.core import setup
 setup(
     name='IPythonBell',
     version='0.9',
-    packages=['ipythonbell',],
+    packages=['ipybell',],
     license='MIT',
     author='Sam Whitehall',
     author_email='me@samwhitehall.com',
