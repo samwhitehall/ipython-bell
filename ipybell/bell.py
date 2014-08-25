@@ -3,7 +3,7 @@ __license__ = 'MIT'
 __version__ = '0.9'
 
 import ast
-import notifiers
+from ipybell import notifiers
 
 from IPython.core.error import UsageError
 from IPython.core.magic import magics_class, line_cell_magic
