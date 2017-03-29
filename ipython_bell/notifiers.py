@@ -20,6 +20,9 @@ class TerminalBell:
     def linux(self, title, text):
         self.ping(out)
 
+    def windows(self, title, text):
+        raise NotImplementedError('Cannot do terminal bell on Windows')
+
 
 class Say:
     """System beep."""
@@ -31,6 +34,13 @@ class Say:
     def linux(self, title, text):
         os.system("beep")
         os.system("spd-say 'Task Complete'")
+
+    def windows(self, title, text):
+        try:
+            import winsound
+            winsound.PlaySound("SystemExclamation", winsound.SND_ALIAS)
+        except ImportError:
+            raise Exception('winsound not installed')
 
 
 class Notification:
@@ -56,6 +66,14 @@ class Notification:
 
         if self.sound:
             os.system("beep")
+
+    def windows(self, title, text):
+        try:
+            from win10toast import ToastNotifier
+            toaster = ToastNotifier()
+            toaster.show_toast(title, text)
+        except ImportError:
+            raise Exception('win10toast not installed')
 
 
 class SilentNotification(Notification):

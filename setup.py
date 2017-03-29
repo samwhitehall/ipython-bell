@@ -1,4 +1,17 @@
+import platform
+
 from distutils.core import setup
+
+
+requirements = [
+    'IPython (>=1.00)',
+]
+
+if platform.system() == 'Windows':
+    requirements += ['winsound']
+
+    if int(platform.release()) >= 10:
+        requirements += ['win10toast']
 
 setup(
     name='IPythonBell',
@@ -19,7 +32,5 @@ setup(
         'Natural Language :: English',
         'Topic :: Utilities',
     ],
-    requires=[
-        'IPython (>=1.00)',
-    ],
+    requires=requirements,
 )

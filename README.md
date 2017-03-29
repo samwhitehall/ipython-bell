@@ -42,7 +42,9 @@ There are four currently available notifiers, selectable with the `-n` or `--not
 * **Silent Notification** `notify-silent` -- operating notification without
   sound
 
-N.B. you may need to install `beep` and/or `libnotify` on Linux.
+*MacOS*: should work out of the box.
+*Linux*: you may need to install `beep` and/or `libnotify` on Linux.
+*Windows*: this is untested, so please raise any issue (notifications only work on Windows 10+)
 
 Specified as follows (in this case, for Notification Center):
 
