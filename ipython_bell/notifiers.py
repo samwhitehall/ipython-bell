@@ -1,17 +1,20 @@
-''' notifiers.py : contains separated code for actually performing the 
-notification itself.'''
+"""
+Contains separate handlers performing the notification itself.
+"""
 
 import sys
 
 class TerminalBell:
-    '''Default choice to print an audible bell character to stdout. Works in
-    terminal IPython and IPython QT, but not in IPython Notebook.'''
+    """
+    Default choice to print an audible bell character to stdout. Works in
+    terminal IPython and IPython QT, but not in IPython Notebook.
+    """
 
     def ping(self, expr, out, exception=None):
         sys.stdout.write('\a')
 
 class NSBeep:
-    '''System beep (OS X only).'''
+    """System beep (OS X only)."""
     def ping(self, expr, out, exception=None):
         try:
             from AppKit import NSBeep
@@ -21,7 +24,7 @@ class NSBeep:
                 "not on OS X, or are on an old version without PyObjC")
 
 class OSXNotificationCentre:
-    '''Send a full notification to OS X Notification Centre (OS X 10.8+)'''
+    """Send a full notification to OS X Notification Centre (OS X 10.8+)"""
     sound = True
     def ping(self, expr, out, exception=None):
         try:
@@ -35,12 +38,12 @@ class OSXNotificationCentre:
 
         notification = NSUserNotification.alloc().init()
         if exception:
-            notification.setTitle_('%s in iPython Task' 
+            notification.setTitle_('%s in iPython Task'
                 % str(exception.__class__.__name__))
-            notification.setInformativeText_(str(exception)) 
+            notification.setInformativeText_(str(exception))
         else:
             notification.setTitle_('iPython Task Complete')
-            notification.setInformativeText_(out) 
+            notification.setInformativeText_(out)
         notification.setSubtitle_(expr.split('\n')[0])
         notification.setUserInfo_({})
         if self.sound:

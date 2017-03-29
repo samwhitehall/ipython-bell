@@ -1,10 +1,10 @@
 ## About
-IPython Bell is a simple magic for IPython, which notifies the user when the current line/cell has finished execution. This is particularly useful for long tasks. This also works in IPython QT and IPython Notebook. It can also notify you via. OS X Notification Center.
+IPython Bell is a simple magic for IPython, which notifies the user when the current line/cell has finished execution. This is particularly useful for long tasks. This also works in IPython and Jupyter Notebooks. It can also notify you via. OS X Notification Center.
 
 ## Installation
 IPython bell can be installed as a standard Python package: either from PyPI:
 
-    pip install IPythonBell
+    pip install ipython-bell
 
 or from git:
     
@@ -12,16 +12,16 @@ or from git:
     cd ipython-bell/
     python setup.py install
     
-This can be imported into an IPython shell session using either: `import ipybell` or `%load_ext ipybell`
+This can be imported into an IPython shell session using either: `import ipybell` or `%load_ext ipython_bell`
     
 Although you probably want it to load when IPython loads, in which case, edit your IPython profile file (by default `~/.ipython/profile_default/ipython_config.py`)
-and add `ipybell` to :
+and add `ipython_bell` to :
 
     c.TerminalIPythonApp.extensions = [
-        'ipybell'
+        'ipython_bell'
     ]
 
-(you may need to create this).
+(you may need to create this, using `ipython profile create`).
 
 ## Usage
 This can be used as a magic for a single line (line magic):
