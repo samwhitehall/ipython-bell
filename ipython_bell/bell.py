@@ -48,8 +48,8 @@ class BellMagic(ExecutionMagics):
         else:
             code = ' '.join(args.statement)
 
-        out = self.shell.run_cell(code)
-        notifier.ping(code, out)
+        output = self.shell.run_cell(code)
+        notifier.ping(output)
 
 
 # hook into iPython

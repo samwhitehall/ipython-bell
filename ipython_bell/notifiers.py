@@ -11,13 +11,13 @@ class TerminalBell:
     terminal IPython and IPython QT, but not in IPython Notebook.
     """
 
-    def ping(self, expr, out, exception=None):
+    def ping(self, out, exception=None):
         sys.stdout.write("\a")
 
 
 class Say:
     """System beep."""
-    def ping(self, expr, out, exception=None):
+    def ping(self, out, exception=None):
         os.system("osascript -e 'beep'")
         os.system("say 'Task complete'")
 
@@ -26,12 +26,12 @@ class Notification:
     """Send a full notification."""
     sound = True
 
-    def ping(self, expr, out):
-        if out.success:
+    def ping(self, output):
+        if output.success:
             title = 'IPython Task Complete'
-            text = out.result or ''
+            text = output.result or ''
         else:
-            exception = out.error_in_exec
+            exception = output.error_in_exec
             title = '{} in IPython Task'.format(exception.__class__.__name__)
             text = exception.message
 
