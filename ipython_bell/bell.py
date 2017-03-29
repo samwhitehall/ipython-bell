@@ -47,11 +47,7 @@ class BellMagic(ExecutionMagics):
         args = parse_argstring(self.bell, line)
         notifier = notifiers.get(args.notifier, notifiers['notify'])
 
-        if cell:
-            code = cell
-        else:
-            code = ' '.join(args.statement)
-
+        code = cell if cell else ' '.join(args.statement)
         output = self.shell.run_cell(code)
 
         if output.success:
