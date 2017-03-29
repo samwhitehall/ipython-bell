@@ -2,8 +2,8 @@ from distutils.core import setup
 
 setup(
     name='IPythonBell',
-    version='0.9.1',
-    packages=['ipybell',],
+    version='0.9.2',
+    packages=['ipython_bell',],
     license='MIT',
     author='Sam Whitehall',
     author_email='me@samwhitehall.com',
