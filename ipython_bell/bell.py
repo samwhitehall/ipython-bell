@@ -18,17 +18,18 @@ notifiers = {
     'ncsilent' : notifiers.OSXNotificationCentreSilent()
 }
 
+
 @magics_class
 class BellMagic(ExecutionMagics):
 
     # define line and cell magic (%bell and %%bell)
     @magic_arguments()
-    @argument('-n', 
-        '--notifier', 
-        choices=notifiers.keys(), 
+    @argument('-n',
+        '--notifier',
+        choices=notifiers.keys(),
         help='Choice of notifiers')
-    @argument('statement', 
-        nargs='*', 
+    @argument('statement',
+        nargs='*',
         help='')
     @line_cell_magic
     def bell(self, line, cell=None):
@@ -40,7 +41,7 @@ class BellMagic(ExecutionMagics):
         if args.notifier:
             notifier = notifiers[args.notifier]
         else:
-            notifier = notifiers['term'] # TODO: some better ability to set defaults 
+            notifier = notifiers['term'] # TODO: some better ability to set defaults
 
         if cell:
             code = cell
@@ -49,8 +50,9 @@ class BellMagic(ExecutionMagics):
 
         out = self.shell.run_cell(code)
         notifier.ping(code, out)
-                
+
         return out
+
 
 # hook into iPython
 ip = get_ipython()
