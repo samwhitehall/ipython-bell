@@ -13,9 +13,9 @@ from IPython.core.magic_arguments import (argument, magic_arguments,
 
 notifiers = {
     'term' : notifiers.TerminalBell(),
-    'osx' : notifiers.NSBeep(),
-    'nc' : notifiers.OSXNotificationCentre(),
-    'ncsilent' : notifiers.OSXNotificationCentreSilent()
+    'say' : notifiers.Say(),
+    'notify' : notifiers.Notification(),
+    'notify-silent' : notifiers.SilentNotification()
 }
 
 
@@ -41,7 +41,7 @@ class BellMagic(ExecutionMagics):
         if args.notifier:
             notifier = notifiers[args.notifier]
         else:
-            notifier = notifiers['term'] # TODO: some better ability to set defaults
+            notifier = notifiers['term']
 
         if cell:
             code = cell
@@ -50,8 +50,6 @@ class BellMagic(ExecutionMagics):
 
         out = self.shell.run_cell(code)
         notifier.ping(code, out)
-
-        return out
 
 
 # hook into iPython

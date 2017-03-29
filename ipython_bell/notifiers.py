@@ -2,6 +2,7 @@
 Contains separate handlers performing the notification itself.
 """
 
+import os
 import sys
 
 class TerminalBell:
@@ -11,49 +12,36 @@ class TerminalBell:
     """
 
     def ping(self, expr, out, exception=None):
-        sys.stdout.write('\a')
+        sys.stdout.write("\a")
 
-class NSBeep:
-    """System beep (OS X only)."""
+
+class Say:
+    """System beep."""
     def ping(self, expr, out, exception=None):
-        try:
-            from AppKit import NSBeep
-            NSBeep()
-        except ImportError:
-            raise Exception("Could not import AppKit.NSBeep -- maybe you're"
-                "not on OS X, or are on an old version without PyObjC")
+        os.system("osascript -e 'beep'")
+        os.system("say 'Task complete'")
 
-class OSXNotificationCentre:
-    """Send a full notification to OS X Notification Centre (OS X 10.8+)"""
+
+class Notification:
+    """Send a full notification."""
     sound = True
-    def ping(self, expr, out, exception=None):
-        try:
-            import Foundation, AppKit, objc
-        except ImportError:
-            raise Exception("Could not import Foundation/AppKit/objc -- maybe"
-                "you're not on OS X 10.8+")
 
-        NSUserNotification = objc.lookUpClass('NSUserNotification')
-        NSUserNotificationCenter = objc.lookUpClass('NSUserNotificationCenter')
-
-        notification = NSUserNotification.alloc().init()
-        if exception:
-            notification.setTitle_('%s in iPython Task'
-                % str(exception.__class__.__name__))
-            notification.setInformativeText_(str(exception))
+    def ping(self, expr, out):
+        if out.success:
+            title = 'IPython Task Complete'
+            text = out.result or ''
         else:
-            notification.setTitle_('iPython Task Complete')
-            notification.setInformativeText_(out)
-        notification.setSubtitle_(expr.split('\n')[0])
-        notification.setUserInfo_({})
+            exception = out.error_in_exec
+            title = '{} in IPython Task'.format(exception.__class__.__name__)
+            text = exception.message
+
+        applescript = ('display notification "{}" with title "{}"').format(text, title)
         if self.sound:
-            notification.setSoundName_('NSUserNotificationDefaultSoundName')
+            applescript += ' sound name "default"'
 
-        NSUserNotificationCenter\
-            .defaultUserNotificationCenter()\
-            .scheduleNotification_(notification)
+        command = "osascript -e '{}'".format(applescript)
+        os.system(command)
 
-        return None
 
-class OSXNotificationCentreSilent(OSXNotificationCentre):
+class SilentNotification(Notification):
     sound = False

@@ -37,15 +37,15 @@ or across multiple lines (cell magic):
     
 There are four currently available notifiers, selectable with the `-n` or `--notifier` arguments:
 * **Terminal Bell** `term` -- (default) prints an audible bell character to `stdout` (doesn't work in Notebook).
-* **Mac System Beep** `osx` -- system beep (Mac OS X only).
-* **Notification Center** `nc` -- Notification Center (Mac OS X 10.8+ only)
-* **Notification Center (silent)** `ncsilent` -- Notification Center, just popup (Mac OS X 10.8+ only)
+* **Mac System Beep** `say` -- system beep (Mac OS X only).
+* **Notification Center** `notify` -- Notification Center (Mac OS X 10.8+ only)
+* **Notification Center (silent)** `notify-silent` -- Notification Center, just popup (Mac OS X 10.8+ only)
 
 Specified as follows (in this case, for Notification Center):
 
-    In [1]: %bell -n nc print 'hello'
+    In [1]: %bell -n notify print 'hello'
     hello
 
-    In[2]: %%bell -n nc
+    In[2]: %%bell -n notify
     import time
     time.sleep(5)
