@@ -37,9 +37,12 @@ or across multiple lines (cell magic):
     
 There are four currently available notifiers, selectable with the `-n` or `--notifier` arguments:
 * **Terminal Bell** `term` -- (default) prints an audible bell character to `stdout` (doesn't work in Notebook).
-* **Mac System Beep** `say` -- system beep (Mac OS X only).
-* **Notification Center** `notify` -- Notification Center (Mac OS X 10.8+ only)
-* **Notification Center (silent)** `notify-silent` -- Notification Center, just popup (Mac OS X 10.8+ only)
+* **System Beep** `say` -- system beep
+* **Notification** `notify` -- operating system notification with sound
+* **Silent Notification** `notify-silent` -- operating notification without
+  sound
+
+N.B. you may need to install `beep` and/or `libnotify` on Linux.
 
 Specified as follows (in this case, for Notification Center):
 

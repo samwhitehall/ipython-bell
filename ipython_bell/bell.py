@@ -22,6 +22,7 @@ notifiers = {
 
 method_for_platform = {
     'Darwin': 'osx',
+    'Linux': 'linux',
 }
 
 

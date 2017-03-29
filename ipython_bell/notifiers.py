@@ -17,6 +17,9 @@ class TerminalBell:
     def osx(self, title, text):
         self.ping(out)
 
+    def linux(self, title, text):
+        self.ping(out)
+
 
 class Say:
     """System beep."""
@@ -24,6 +27,10 @@ class Say:
     def osx(self, title, text):
         os.system("osascript -e 'beep'")
         os.system("say 'Task complete'")
+
+    def linux(self, title, text):
+        os.system("beep")
+        os.system("spd-say 'Task Complete'")
 
 
 class Notification:
@@ -37,6 +44,18 @@ class Notification:
 
         command = "osascript -e '{}'".format(applescript)
         os.system(command)
+
+    def linux(self, title, text):
+        if output.success:
+            text = 'IPython Task Complete'
+        else:
+            text = output.error_in_exec.__class__.__name__
+
+        command = "notify-send '{}' -h '{}'".format(title, text)
+        os.system(command)
+
+        if self.sound:
+            os.system("beep")
 
 
 class SilentNotification(Notification):
