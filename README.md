@@ -4,7 +4,7 @@ IPython Bell is a simple magic for IPython and Jupyter Notebooks, which notifies
 ## Installation
 IPython bell can be installed as a standard Python package: either from PyPI:
 
-    pip install ipython-bell
+    pip install IPythonBell
 
 or from git:
     

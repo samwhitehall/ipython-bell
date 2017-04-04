@@ -15,13 +15,13 @@ if platform.system() == 'Windows':
 
 setup(
     name='IPythonBell',
-    version='0.9.3',
+    version='0.9.6',
     packages=['ipython_bell',],
     license='MIT',
     author='Sam Whitehall',
     author_email='me@samwhitehall.com',
     url='http://www.github.com/samwhitehall/ipython-bell',
-    description='Python line & cell magic to notify the programmer when a '
+    description='IPython/Jupyter notebook magic to notify the programmer when a '
         'line/cell has completed execution',
     keywords='ipython jupyter notebook notification notification complete alert',
     classifiers=[
