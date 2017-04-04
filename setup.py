@@ -15,7 +15,7 @@ if platform.system() == 'Windows':
 
 setup(
     name='IPythonBell',
-    version='0.9.6',
+    version='0.9.9',
     packages=['ipython_bell',],
     license='MIT',
     author='Sam Whitehall',
@@ -23,6 +23,7 @@ setup(
     url='http://www.github.com/samwhitehall/ipython-bell',
     description='IPython/Jupyter notebook magic to notify the programmer when a '
         'line/cell has completed execution',
+    long_description=open('README.rst').read(),
     keywords='ipython jupyter notebook notification notification complete alert',
     classifiers=[
         'Development Status :: 4 - Beta',
