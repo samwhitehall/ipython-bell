@@ -15,10 +15,10 @@ class TerminalBell:
         sys.stdout.write("\a")
 
     def osx(self, title, text):
-        self.ping(out)
+        self.ping()
 
     def linux(self, title, text):
-        self.ping(out)
+        self.ping()
 
     def windows(self, title, text):
         raise NotImplementedError('Cannot do terminal bell on Windows')
@@ -33,6 +33,7 @@ class Say:
 
     def linux(self, title, text):
         os.system("beep")
+        os.system("paplay /usr/share/sounds/ubuntu/stereo/bell.ogg")
         os.system("spd-say 'Task Complete'")
 
     def windows(self, title, text):
@@ -56,16 +57,11 @@ class Notification:
         os.system(command)
 
     def linux(self, title, text):
-        if output.success:
-            text = 'IPython Task Complete'
-        else:
-            text = output.error_in_exec.__class__.__name__
-
-        command = "notify-send '{}' -h '{}'".format(title, text)
+        command = "notify-send '{}' '{}'".format(title, text)
         os.system(command)
 
         if self.sound:
-            os.system("beep")
+            Say().linux(title, text)
 
     def windows(self, title, text):
         try:
