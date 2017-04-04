@@ -37,14 +37,16 @@ or across multiple lines (cell magic):
     
 There are four currently available notifiers, selectable with the `-n` or `--notifier` arguments:
 * **Terminal Bell** `term` -- prints an audible bell character to `stdout` (doesn't work in Notebook).
-* **System Beep** `say` -- system beep
+* **Say** `say` -- play a system sound & use text-to-speech.
 * **Notification** `notify` -- (default) operating system notification with sound
 * **Silent Notification** `notify-silent` -- operating notification without
   sound
 
-*MacOS*: should work out of the box.
-*Linux*: you may need to install `beep` and/or `libnotify` on Linux.
-*Windows*: this is untested, so please raise any issue (notifications only work on Windows 10+)
+**MacOS**: should work out of the box.
+
+**Linux**: you may need to install `beep` and/or `libnotify` on Linux.
+
+**Windows**: this is *entirely untested*, so please create an issue (notifications probably only work on Windows 10+).
 
 Specified as follows (in this case, for Notification Center):
 
