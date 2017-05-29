@@ -15,7 +15,7 @@ if platform.system() == 'Windows':
 
 setup(
     name='IPythonBell',
-    version='0.9.9',
+    version='0.10',
     packages=['ipython_bell',],
     license='MIT',
     author='Sam Whitehall',
