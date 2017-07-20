@@ -2,7 +2,7 @@ About
 -----
 
 IPython Bell is a simple magic for IPython and Jupyter Notebooks, which
-notifies yoy when the current line/cell has finished execution. This is
+notifies you when the current line/cell has finished execution. This is
 particularly useful for long tasks. It can make sounds or even make
 notification bubbles pop up.
 
